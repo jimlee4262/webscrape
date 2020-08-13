@@ -101,8 +101,8 @@ def scrape():
                         "Mars_Description": paragraph,
                         "jpl_link": featured_image_url,
                         "table_html": df_html,
-                        "twitter": mars_weather}
-                        # "hemispheres": hemisphere_dictionary}
+                        "twitter": mars_weather,
+                        "hemispheres": hemisphere_dictionary}
     
     return mars_information
 
