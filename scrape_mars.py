@@ -1,13 +1,14 @@
+#importing the dependencies
 from splinter import Browser
 from bs4 import BeautifulSoup
 import pandas as pd
-import requests
+import time
 
 
 #initizalize splinter function
 def initiate_browser():
     executable_path = {'executable_path': 'chromedriver.exe'}
-    return Browser('chrome', **executable_path, headless=False)
+    return Browser("chrome", **executable_path, headless=False)
 
 def scrape():
     browser = initiate_browser()
@@ -15,6 +16,7 @@ def scrape():
     #NASA
     nasaurl = 'https://mars.nasa.gov/news/'
     browser.visit(nasaurl)
+    time.sleep(10)
 
     #beautiful soup
     nasahtml = browser.html
@@ -34,14 +36,16 @@ def scrape():
     jplsoup = BeautifulSoup(jplhtml, 'html.parser')
 
     #JPL Image
-    featured_image_url = "jpl.nasa.gov" + jplsoup.find('img', class_='thumb')['src']
+    featured_image_url = "https://www.jpl.nasa.gov" + jplsoup.find('img', class_='thumb')['src']
 
     #Twitter
     twitterurl = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(twitterurl)
+    time.sleep(10)
 
     #Beautiful Soup
     twitterhtml = browser.html
+    time.sleep(10)
     twittersoup = BeautifulSoup(twitterhtml, 'html.parser')
 
     #Get recent tweet
@@ -64,6 +68,7 @@ def scrape():
     
     #converting html table string w/ pandas
     df_html = df.to_html()
+    df_html = df_html.replace('\n', '')
 
     #Mars Hemispheres
     marshem = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
@@ -102,7 +107,7 @@ def scrape():
                         "jpl_link": featured_image_url,
                         "table_html": df_html,
                         "twitter": mars_weather,
-                        "hemispheres": hemisphere_dictionary}
+                        "hemisphere": hemisphere_dictionary}
     
     return mars_information
 
